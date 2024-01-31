@@ -46,11 +46,11 @@ function render(program) {
 
   gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-   -1.0,  1.0, 0, // point 1
-    1.0,  1.0, 0, // point 2
+   -1.0,  1.0, 0, // Bottom Left Triangle
+    1.0,  1.0, 0,
    -1.0, -1.0, 0,
-    1.0,  1.0, 0, // point 1
-    1.0, -1.0, 0, // point 2
+    1.0,  1.0, 0, // Top Right Triangle
+    1.0, -1.0, 0, 
    -1.0, -1.0, 0
   ]), gl.STATIC_DRAW);
 
@@ -72,39 +72,40 @@ function render(program) {
   gl.clear(gl.COLOR_BUFFER_BIT);
 
   let oldTime = Date.now();
-  let frameCount = 0;
+  let newTime = oldTime;
   let totalFrameCount = 0;
+  let fps = 100;
   function draw() {
-    frameCount++;
+    //FPS Calculation
     totalFrameCount++;
-    if(frameCount > 99) {
-      const fps = Math.round(100000/(Date.now() - oldTime));
+    if(totalFrameCount%100 == 0) {
+      newTime = Date.now();
+      fps = Math.round(100000/(newTime - oldTime)); //100 * 1000
       document.getElementById("fps").innerText = "FPS: " + fps;
-      frameCount = 0;
-      oldTime = Date.now();
+      oldTime = newTime;
     }
     
 
-    phi+=inputs.mouseEnabled*(inputs.mouseX/50000);
-    theta+=inputs.mouseEnabled*(inputs.mouseY/50000);
+    //Camera Rotation
+    phi+=inputs.mouseEnabled*(inputs.mouseX/(500 * fps));
+    theta+=inputs.mouseEnabled*(inputs.mouseY/(500 * fps));
 
     const lookDir = [Math.sin(theta)*Math.cos(phi), Math.cos(theta), Math.sin(theta)*Math.sin(phi)];
     const orthogonalDir = [Math.sin(phi), 0, -Math.cos(phi)]
 
+    //Camera Movement
     for(let i = 0; i < 3; i++){
       eye[i] += (inputs.w - inputs.s) * lookDir[i];
       eye[i] += (inputs.a - inputs.d) * orthogonalDir[i];
     }
     
-    eye[1] += inputs[' '] - inputs.Shift;
-
+    eye[1] += (inputs[' '] - inputs.Shift) * 100 / fps;
 
     //Mandelbulb Animation
     power = (Math.sin(totalFrameCount/2000)*4) + 6;
     gl.uniform1f(powerRef, power);
     document.getElementById("power").innerText = "Power: " + Math.round(100*power)/100;
     
-
     gl.uniform3f(eyeRef, ...eye);
     gl.uniform3f(lookDirRef, ...lookDir);
     
@@ -113,6 +114,7 @@ function render(program) {
       0,     // offset
       6,     // num vertices to process
     );
+
     requestAnimationFrame(draw);
   }
     

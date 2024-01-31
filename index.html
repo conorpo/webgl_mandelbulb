@@ -4,33 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WEBGL Mandelbulb</title>
+    <script src="compile.js" defer></script>
+    <script src="main.js" defer></script>
+    <script src="input.js" defer></script>
 </head>
 <body>
-    <canvas id="canvas" width=900 height=900></canvas>
+    <canvas id="canvas" width=900 height=600></canvas>
     <div>
         <h3 id="fps"></h3>
         <h3 id="power"></h3>
+        <a href="https://github.com/conorpo/webgl_mandelbulb">Github<img src="./assets/github-mark-white.svg" alt=""></a>
     </div>
-    <script src="compile.js"></script>
-    <script src="main.js"></script>
-    <script src="input.js"></script>
 </body>
 </html>
 
 
 <style>
+    body {
+        margin: 0px;
+        padding: 0px;
+        display: flex;
+    }
     canvas {
-        border: 3px solid black;
-        float: left;
+        width: 150vh;
+        height: 100vh;
     }
     div {
         font-family: 'Courier New', Courier, monospace;
-        margin-left: 10px;
-        float: left;
-        width: 480px;
-        height: 880px;
-        border: 3px solid black;
+        float: right;
+        flex: auto;
+        background-color: rgb(150, 150, 230);
         padding: 10px;
+        box-sizing: border-box;
     }
     h2{
         margin-bottom: 5px;
@@ -41,5 +46,20 @@
     label {
         margin-left: 20px;
         margin-right: 7px;
+    }
+    
+    a {
+        padding: 1px 5px;
+        background-color: rgba(255, 255, 255, 0.4);
+        border: 2px black solid;
+        font-size: 2rem;
+    }
+
+    img {
+        margin-left: 5px;
+        width: 30px;
+        height: 30px;
+        transform: translateY(6px);
+        mix-blend-mode: difference;
     }
 </style>

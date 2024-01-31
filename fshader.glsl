@@ -7,7 +7,8 @@ uniform float power;
 
 uniform vec3 lookDir;
 
-const int MAX_MARCHING_STEPS = 250;
+const int MAX_MARCHING_STEPS = 150;
+const int MANDELBULB_STEPS = 15;
 const float EPSILON = 0.001;
 
 vec2 mandelBulb(vec3 pos) {
@@ -16,7 +17,7 @@ vec2 mandelBulb(vec3 pos) {
 	float dr = 1.0;
 	float r = 0.0;
     int n = 0;
-	for (int i = 0; i < 25; i++) {
+	for (int i = 0; i < MANDELBULB_STEPS; i++) {
         n++;
 		r = length(z);
 		if (r > 2.0) break;
@@ -41,7 +42,6 @@ vec2 mandelBulb(vec3 pos) {
 vec2 sceneSDF(vec3 point) {
     return mandelBulb(point);
 }
-
 
 
 vec3 shortestDistanceToSurface(vec3 eye, vec3 marchingDirection, float start, float end) {
